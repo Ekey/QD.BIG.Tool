@@ -2,10 +2,11 @@
 Tool for extract BigFile archives from games developed by [Quantic Dream](https://en.wikipedia.org/wiki/Quantic_Dream)
 
 # Supported Games
-| Game   | Steam   | SteamDB
-|---      |---    |---    |
-| Detroit: Become Human | [here](https://store.steampowered.com/app/1222140/Detroit_Become_Human) | [here](https://steamdb.info/app/1222140)
-| Heavy Rain | [here](https://store.steampowered.com/app/960910/Heavy_Rain) | [here](https://steamdb.info/app/960910)
+| Game   | Steam   | SteamDB   |Debug Names
+|---      |---    |---    |---    |
+| Beyond: Two Souls | [here](https://store.steampowered.com/app/960990/Beyond_Two_Souls) | [here](https://steamdb.info/app/960990) | ✔️
+| Detroit: Become Human | [here](https://store.steampowered.com/app/1222140/Detroit_Become_Human) | [here](https://steamdb.info/app/1222140) | ❌
+| Heavy Rain | [here](https://store.steampowered.com/app/960910/Heavy_Rain) | [here](https://steamdb.info/app/960910) | ✔️
 
 # Note
 > Just old stuff :)

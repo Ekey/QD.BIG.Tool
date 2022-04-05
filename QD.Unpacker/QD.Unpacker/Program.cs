@@ -25,6 +25,7 @@ namespace QD.Unpacker
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("[Examples]");
+                Console.WriteLine("    QD.Unpacker E:\\Games\\BEYOND Two Souls\\BigFile_PC.idx D:\\Unpacked");
                 Console.WriteLine("    QD.Unpacker E:\\Games\\Detroit Become Human\\BigFile_PC.idx D:\\Unpacked");
                 Console.WriteLine("    QD.Unpacker E:\\Games\\HEAVY RAIN\\Resources\\BigFile_WIN.idx D:\\Unpacked");
                 Console.ResetColor();
@@ -33,11 +34,19 @@ namespace QD.Unpacker
 
             String m_IndexFile = Utils.iCheckIndexFile(args[0]);
             String m_Output = Utils.iCheckArgumentsPath(args[1]);
+            String m_DebugFile = Utils.iDebugFile(args[0]);
 
             if (!File.Exists(m_IndexFile))
             {
                 Utils.iSetError("[ERROR]: Input index file -> " + m_IndexFile + " <- does not exist");
                 return;
+            }
+
+            BigFileTypes.iInitResourceTypes();
+
+            if (File.Exists(m_DebugFile))
+            {
+                BigFileDebug.iLoad(m_DebugFile);
             }
 
             BigFileUnpack.iDoIt(m_IndexFile, m_Output);

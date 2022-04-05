@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B6350787-8271-4FF7-8A6A-F59217D1DC4C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DT.Unpacker</RootNamespace>
-    <AssemblyName>DT.Unpacker</AssemblyName>
+    <RootNamespace>QD.Unpacker</RootNamespace>
+    <AssemblyName>QD.Unpacker</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="FileSystem\Other\Helpers.cs" />
     <Compile Include="FileSystem\Other\Utils.cs" />
+    <Compile Include="FileSystem\Package\BigFileDebug.cs" />
     <Compile Include="FileSystem\Package\BigFileEntry.cs" />
     <Compile Include="FileSystem\Package\BigFileHeader.cs" />
     <Compile Include="FileSystem\Package\BigFileTypes.cs" />

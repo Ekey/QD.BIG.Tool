@@ -13,8 +13,6 @@ namespace QD.Unpacker
         {
             using (FileStream TIndexStream = File.OpenRead(m_IndexFile))
             {
-                BigFileTypes.iInitResourceTypes();
-
                 var m_Header = new BigFileHeader();
                 m_Header.m_Magic = Encoding.ASCII.GetString(TIndexStream.ReadBytes(20));
                 m_Header.dwVersion = TIndexStream.ReadInt32(true);
@@ -22,8 +20,9 @@ namespace QD.Unpacker
 
                 switch (m_Header.dwVersion)
                 {
-                    case 13: m_Header.m_SubMagic = Encoding.ASCII.GetString(TIndexStream.ReadBytes(72)); break;
-                    case 18: m_Header.m_SubMagic = Encoding.ASCII.GetString(TIndexStream.ReadBytes(72 + 1)).TrimEnd('\0'); break;
+                    case 13:
+                    case 17: m_Header.m_SubMagic = Encoding.ASCII.GetString(TIndexStream.ReadBytes(72)); break;
+                    case 18: m_Header.m_SubMagic = Encoding.ASCII.GetString(TIndexStream.ReadBytes(72)); TIndexStream.Seek(1, SeekOrigin.Current); break;
                     default: throw new Exception("[ERROR]: Invalid version of index file!");
                 }
 
@@ -51,6 +50,7 @@ namespace QD.Unpacker
                     Int32 dwSize = TIndexStream.ReadInt32(true);
                     Int32 dwPaddedSize = TIndexStream.ReadInt32(true);
                     Int32 dwPackageID = TIndexStream.ReadInt32(true);
+                    String m_ResourceName = "";
                     String m_ArchiveFile = null;
 
                     if (dwPackageID == 0)
@@ -64,6 +64,14 @@ namespace QD.Unpacker
                     
                     String m_ResourceType = BigFileTypes.iGetResourceType(dwResourceTypeID);
 
+                    if (BigFileDebug.bDebugFileLoaded)
+                    {
+                        m_ResourceName = m_ResourceType + @"\" + BigFileDebug.iGetDebugResourceName(dwResourceTypeID, dwFileID, dwSize);
+                    }
+                    else
+                    {
+                        m_ResourceName = m_ResourceType + @"\" + dwFileID.ToString();
+                    }
 
                     var TEntry = new BigFileEntry
                     {
@@ -76,9 +84,13 @@ namespace QD.Unpacker
                         dwPackageID = dwPackageID,
                         m_ArchiveFile = m_ArchiveFile,
                         m_ResourceType = m_ResourceType,
+                        m_ResourceName = m_ResourceName,
                     };
 
-                    m_EntryTable.Add(TEntry);
+                    if (TEntry.dwPaddedSize != 0 || TEntry.dwSize != 0)
+                    {
+                        m_EntryTable.Add(TEntry);
+                    }
                 }
 
                 TIndexStream.Dispose();
@@ -91,7 +103,7 @@ namespace QD.Unpacker
                         return;
                     }
 
-                    String m_FileName = m_Entry.m_ResourceType + @"\" + m_Entry.dwFileID.ToString();
+                    String m_FileName = m_Entry.m_ResourceName;
                     String m_FullPath = m_DstFolder + m_FileName;
 
                     Utils.iSetInfo("[UNPACKING]: " + m_FileName);
@@ -101,7 +113,7 @@ namespace QD.Unpacker
                     {
                         TArchiveStream.Seek(m_Entry.dwOffset, SeekOrigin.Begin);
 
-                        if (m_Entry.dwPaddedSize != 0)
+                        if (m_Entry.dwPaddedSize > m_Entry.dwSize)
                         {
                             var lpBuffer = TArchiveStream.ReadBytes(m_Entry.dwPaddedSize);
                             File.WriteAllBytes(m_FullPath, lpBuffer);
