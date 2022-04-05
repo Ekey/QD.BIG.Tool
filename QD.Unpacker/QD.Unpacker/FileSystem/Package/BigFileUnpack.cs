@@ -39,6 +39,8 @@ namespace QD.Unpacker
                     throw new Exception("[ERROR]: Invalid sub magic of index file!");
                 }
 
+                String m_BaseFile = Path.GetDirectoryName(m_IndexFile) + @"\" + Path.GetFileNameWithoutExtension(m_IndexFile);
+
                 m_EntryTable.Clear();
                 for (Int32 i = 0; i < m_Header.dwTotalFiles; i++)
                 {
@@ -53,19 +55,11 @@ namespace QD.Unpacker
 
                     if (dwPackageID == 0)
                     {
-                        switch (m_Header.dwVersion)
-                        {
-                            case 13: m_ArchiveFile = "BigFile_WIN.dat"; break;
-                            case 18: m_ArchiveFile = "BigFile_PC.dat"; break;
-                        }
+                        m_ArchiveFile += m_BaseFile + ".dat";
                     }
                     else
                     {
-                        switch (m_Header.dwVersion)
-                        {
-                            case 13: m_ArchiveFile = "BigFile_WIN.d" + dwPackageID.ToString("D2"); break;
-                            case 18: m_ArchiveFile = "BigFile_PC.d" + dwPackageID.ToString("D2"); break;
-                        }
+                        m_ArchiveFile += m_BaseFile + ".d" + dwPackageID.ToString("D2");
                     }
                     
                     String m_ResourceType = BigFileTypes.iGetResourceType(dwResourceTypeID);
@@ -80,7 +74,7 @@ namespace QD.Unpacker
                         dwSize = dwSize,
                         dwPaddedSize = dwPaddedSize,
                         dwPackageID = dwPackageID,
-                        m_ArchiveFile = Path.GetDirectoryName(m_IndexFile) + @"\" + m_ArchiveFile,
+                        m_ArchiveFile = m_ArchiveFile,
                         m_ResourceType = m_ResourceType,
                     };
 
