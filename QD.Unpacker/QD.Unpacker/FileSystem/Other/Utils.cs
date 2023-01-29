@@ -55,6 +55,12 @@ namespace QD.Unpacker
             return m_Arg;
         }
 
+        public static String iDebugFile(String m_Arg)
+        {
+            m_Arg = Path.GetDirectoryName(m_Arg) + @"\" + Path.GetFileNameWithoutExtension(m_Arg) + ".dbg";
+            return m_Arg;
+        }
+
         public static void iCreateDirectory(String m_Directory)
         {
             if (!Directory.Exists(Path.GetDirectoryName(m_Directory)))
